@@ -47,12 +47,13 @@ The TSV file has the following columns:
 
 ### Sample
 
-```tsv
-province_id	province_en	province_si	province_ta	district_id	district_en	district_si	district_ta	ds_division_id	ds_division_en	ds_division_si	ds_division_ta	gn_division_en	gn_division_si	gn_division_ta	location_code	old_gnd_number	village_en	village_si	village_ta
-63	Western	බස්නාහිර	மேற்கு	42	Colombo	කොළඹ	கொழும்பு	950	Colombo	කොළඹ	கொழும்பு	Fort	කොටුව	கோட்டை	1-1-03-120	C5	Lotus Rd	ලෝටස් පාර	லோட்டஸ் வீதி
-63	Western	බස්නාහිර	மேற்கு	42	Colombo	කොළඹ	கொழும்பு	950	Colombo	කොළඹ	கொழும்பு	Fort	කොටුව	கோட்டை	1-1-03-120	C5	Lanka Bank Rd	ලංකා බැංකු පාර	இலங்கை வங்கி வீதி
-63	Western	බස්නාහිර	மேற்கு	42	Colombo	කොළඹ	கொழும்பு	950	Colombo	කොළඹ	கொழும்பு	Fort	කොටුව	கோட்டை	1-1-03-120	C5	York Street	යෝරක් විදිය	யோர்க் வீதி
-```
+| province_id | province_en | province_si | province_ta | district_id | district_en | district_si | district_ta | ds_division_id | ds_division_en | ds_division_si | ds_division_ta | gn_division_en | gn_division_si | gn_division_ta | location_code | old_gnd_number | village_en     | village_si     | village_ta          |
+| ----------- | ----------- | ----------- | ----------- | ----------- | ----------- | ----------- | ----------- | -------------- | -------------- | -------------- | -------------- | -------------- | -------------- | -------------- | ------------- | -------------- | -------------- | -------------- | ------------------- |
+| 63          | Western     | බස්නාහිර    | மேற்கு      | 42          | Colombo     | කොළඹ        | கொழும்பு    | 950            | Colombo        | කොළඹ           | கொழும்பு       | Fort           | කොටුව          | கோட்டை         | 1-1-03-120    | C5             | Lotus Rd       | ලෝටස් පාර      | லோட்டஸ் வீதி        |
+| 63          | Western     | බස්නාහිර    | மேற்கு      | 42          | Colombo     | කොළඹ        | கொழும்பு    | 950            | Colombo        | කොළඹ           | கொழும்பு       | Fort           | කොටුව          | கோட்டை         | 1-1-03-120    | C5             | Lanka Bank Rd  | ලංකා බැංකු පාර | இலங்கை வங்கி வீதி   |
+| 63          | Western     | බස්නාහිර    | மேற்கு      | 42          | Colombo     | කොළඹ        | கொழும்பு    | 950            | Colombo        | කොළඹ           | கொழும்பு       | Fort           | කොටුව          | கோட்டை         | 1-1-03-120    | C5             | York Street    | යෝරක් විදිය    | யோர்க் வீதி         |
+| 63          | Western     | බස්නාහිර    | மேற்கு      | 42          | Colombo     | කොළඹ        | கொழும்பு    | 950            | Colombo        | කොළඹ           | கொழும்பு       | Fort           | කොටුව          | கோட்டை         | 1-1-03-120    | C5             | Hospital Lane  | රෝහල් පටු මග   | வைத்தியசாலை ஒழுங்கை |
+| 63          | Western     | බස්නාහිර    | மேற்கு      | 42          | Colombo     | කොළඹ        | கொழும்பூ    | 950            | Colombo        | කොළඹ           | கொழும்பு       | Fort           | කොටුව          | கோட்டை         | 1-1-03-120    | C5             | Chathum Street | චැතැම් විදිය   | செத்தம் வீதி        |
 
 ## Running the Scraper
 
