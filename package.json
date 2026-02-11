@@ -1,0 +1,16 @@
+{
+  "name": "moha-data-scraper",
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "scrape": "tsx src/scraper.ts"
+  },
+  "devDependencies": {
+    "@types/node": "^25.2.3",
+    "tsx": "^4.19.0",
+    "typescript": "^5.7.0"
+  },
+  "dependencies": {
+    "cheerio": "^1.0.0"
+  }
+}
