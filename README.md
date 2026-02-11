@@ -105,6 +105,21 @@ Each level is fetched three times — once for each language (English, Sinhala, 
 All data is sourced from the Ministry of Home Affairs, Sri Lanka:
 http://moha.gov.lk:8090/lifecode
 
+## Disclaimer
+
+This dataset is scraped directly from the official MOHA website and is provided as-is. The source data may contain misspellings, inconsistencies, or outdated entries. If you spot any errors, PRs and issues are very welcome.
+
+## Contributing
+
+Contributions are welcome — feel free to open an issue or submit a PR.
+
+1. Fork the repo
+2. Create your branch (`git checkout -b fix/something`)
+3. Commit your changes
+4. Push and open a pull request
+
+If you notice any missing or incorrect data, please [open an issue](../../issues).
+
 ## License
 
-MIT
+MIT © [Vinod Liyanage](mailto:hello@vinodliyanage.com)
