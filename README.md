@@ -11,7 +11,7 @@ Scrapes the complete village-level and GN (Grama Niladhari) division dataset fro
 | Provinces    | 9       |
 | Districts    | 25      |
 | DS Divisions | 337     |
-| GN Divisions | ~12,356 |
+| GN Divisions | ~12,020 |
 | Villages     | ~52,487 |
 
 ---
