@@ -1,10 +1,8 @@
-# MOHA Village Data Scraper
+# MOHA GN & Village Data Scraper
 
-Scrapes the complete village-level administrative division dataset from [Sri Lanka's Ministry of Home Affairs (MOHA)](http://moha.gov.lk:8090/lifecode) — in all three official languages (English, Sinhala, Tamil).
+Scrapes the complete village-level and GN (Grama Niladhari) division dataset from [Sri Lanka's Ministry of Home Affairs (MOHA)](http://moha.gov.lk:8090/lifecode) — in all three official languages (English, Sinhala, Tamil).
 
-## Dataset
-
-The scraped dataset is available at [`data/villages.tsv`](data/villages.tsv).
+## Datasets
 
 ### At a glance
 
@@ -16,11 +14,13 @@ The scraped dataset is available at [`data/villages.tsv`](data/villages.tsv).
 | GN Divisions | ~12,356 |
 | Villages     | ~52,487 |
 
+---
+
+### Villages — [`data/villages.tsv`](data/villages.tsv)
+
 Every row is a single village, with its full administrative hierarchy in all three languages.
 
-### Schema
-
-The TSV file has the following columns:
+#### Schema
 
 | Column           | Description                                     |
 | ---------------- | ----------------------------------------------- |
@@ -45,7 +45,7 @@ The TSV file has the following columns:
 | `village_si`     | Village name (Sinhala)                          |
 | `village_ta`     | Village name (Tamil)                            |
 
-### Sample
+#### Sample
 
 | province_id | province_en | province_si | province_ta | district_id | district_en | district_si | district_ta | ds_division_id | ds_division_en | ds_division_si | ds_division_ta | gn_division_en | gn_division_si | gn_division_ta | location_code | old_gnd_number | village_en     | village_si     | village_ta          |
 | ----------- | ----------- | ----------- | ----------- | ----------- | ----------- | ----------- | ----------- | -------------- | -------------- | -------------- | -------------- | -------------- | -------------- | -------------- | ------------- | -------------- | -------------- | -------------- | ------------------- |
@@ -53,7 +53,37 @@ The TSV file has the following columns:
 | 63          | Western     | බස්නාහිර    | மேற்கு      | 42          | Colombo     | කොළඹ        | கொழும்பு    | 950            | Colombo        | කොළඹ           | கொழும்பு       | Fort           | කොටුව          | கோட்டை         | 1-1-03-120    | C5             | Lanka Bank Rd  | ලංකා බැංකු පාර | இலங்கை வங்கி வீதி   |
 | 63          | Western     | බස්නාහිර    | மேற்கு      | 42          | Colombo     | කොළඹ        | கொழும்பு    | 950            | Colombo        | කොළඹ           | கொழும்பு       | Fort           | කොටුව          | கோட்டை         | 1-1-03-120    | C5             | York Street    | යෝරක් විදිය    | யோர்க் வீதி         |
 | 63          | Western     | බස්නාහිර    | மேற்கு      | 42          | Colombo     | කොළඹ        | கொழும்பு    | 950            | Colombo        | කොළඹ           | கொழும்பு       | Fort           | කොටුව          | கோட்டை         | 1-1-03-120    | C5             | Hospital Lane  | රෝහල් පටු මග   | வைத்தியசாலை ஒழுங்கை |
-| 63          | Western     | බස්නාහිර    | மேற்கு      | 42          | Colombo     | කොළඹ        | கொழும்பூ    | 950            | Colombo        | කොළඹ           | கொழும்பு       | Fort           | කොටුව          | கோட்டை         | 1-1-03-120    | C5             | Chathum Street | චැතැම් විදිය   | செத்தம் வீதி        |
+| 63          | Western     | බස්නාහිර    | மேற்கு      | 42          | Colombo     | කොළඹ        | கொழும்பූ    | 950            | Colombo        | කොළඹ           | கொழும்பு       | Fort           | කොටුව          | கோட்டை         | 1-1-03-120    | C5             | Chathum Street | චැතැම් විදිය   | செத்தம் வீதி        |
+
+---
+
+### GN Divisions — [`data/gn.tsv`](data/gn.tsv)
+
+Every row is a single GN (Grama Niladhari) division with names in all three languages. Unlike the village data, the MOHA GN endpoint returns all three languages in a **single response**, so no separate per-language requests are needed.
+
+#### Schema
+
+| Column        | Description                                     |
+| ------------- | ----------------------------------------------- |
+| `life_code`   | LIFe code assigned by MOHA (e.g. `1-1-03-005`)  |
+| `gn_code`     | GN division code                                |
+| `name_en`     | GN Division name (English)                      |
+| `name_si`     | GN Division name (Sinhala)                      |
+| `name_ta`     | GN Division name (Tamil)                        |
+| `mpa_code`    | MPA code (if available)                         |
+| `province_id` | MOHA internal ID for the province               |
+| `province`    | Province (multilingual, as returned by MOHA)    |
+| `district_id` | MOHA internal ID for the district               |
+| `district`    | District (multilingual, as returned by MOHA)    |
+| `ds_division` | DS Division (multilingual, as returned by MOHA) |
+
+#### Sample
+
+| life_code  | gn_code | name_en          | name_si        | name_ta       | mpa_code | province_id | province                     | district_id | district                   | ds_division                |
+| ---------- | ------- | ---------------- | -------------- | ------------- | -------- | ----------- | ---------------------------- | ----------- | -------------------------- | -------------------------- |
+| 1-1-03-005 | 005     | Sammanthranapura | සම්මන්ත්‍රණපුර | சம்மந்திரணபுர |          | 63          | 1: බස්නාහිර/ மேற்கு/ Western | 42          | 1: කොළඹ/ கொழும்பு/ Colombo | 3: කොළඹ/ கொழும்பு/ Colombo |
+| 1-1-03-010 | 010     | Mattakkuliya     | මට්ටක්කුලිය    | மட்டக்குளி    | C26      | 63          | 1: බස්නාහිර/ மேற்கு/ Western | 42          | 1: කොළඹ/ கொழும்பு/ Colombo | 3: කොළඹ/ கொழும்பு/ Colombo |
+| 1-1-03-015 | 015     | Modara           | මෝදර           | மோத‍ரை        | C27      | 63          | 1: බස්නාහිර/ மேற்கு/ Western | 42          | 1: කොළඹ/ கொழும்பு/ Colombo | 3: කොළඹ/ கொழும்பு/ Colombo |
 
 ## Running the Scraper
 
@@ -76,7 +106,7 @@ pnpm install
 pnpm scrape
 ```
 
-This hits the MOHA server for every province → district → DS division → village combination in all three languages. It takes a while — the server is not the fastest. Output goes to `output/villages.tsv`.
+This hits the MOHA server for every province → district → DS division → village combination in all three languages. It also fetches GN division data per district (which returns all three languages in one request). It takes a while — the server is not the fastest. Output goes to `output/villages.tsv` and `output/gn.tsv`.
 
 ## How it Works
 
@@ -84,19 +114,21 @@ The scraper walks through the MOHA administrative hierarchy top-down:
 
 1. **Provinces** — hardcoded (they don't change), IDs 63–71
 2. **Districts** — fetched per province via `fetch.php` with `action=province`
-3. **DS Divisions** — fetched per district via `fetch.php` with `action=district`
-4. **Villages** — fetched per DS division via `rpt_village_list.php`
+3. **GN Divisions** — fetched per district via `rpt_gn_list.php` (all 3 languages in one response)
+4. **DS Divisions** — fetched per district via `fetch.php` with `action=district`
+5. **Villages** — fetched per DS division via `rpt_village_list.php`
 
-Each level is fetched three times — once for each language (English, Sinhala, Tamil) — and the results are merged by index into a single row.
+Village data is fetched three times per level — once for each language (English, Sinhala, Tamil) — and the results are merged by index into a single row. GN data only requires a single request per district as the endpoint returns all three languages together.
 
 ## Project Structure
 
 ```
 ├── data/
-│   └── villages.tsv       # the dataset
+│   ├── villages.tsv       # village dataset
+│   └── gn.tsv             # GN division dataset
 ├── src/
 │   └── scraper.ts         # the scraper
-├── output/                 # scraper writes here (gitignored)
+├── output/                # scraper writes here (gitignored)
 ├── package.json
 └── tsconfig.json
 ```

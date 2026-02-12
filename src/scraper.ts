@@ -4,7 +4,12 @@ import { mkdirSync, writeFileSync } from "fs";
 const BASE = "http://moha.gov.lk:8090/lifecode";
 
 const LANG_CONFIG = {
-  en: { fetch: "views/fetch.php", village: "views/rpt_village_list.php", referrer: "village_list" },
+  en: {
+    fetch: "views/fetch.php",
+    village: "views/rpt_village_list.php",
+    gn: "views/rpt_gn_list.php",
+    referrer: "village_list",
+  },
   si: { fetch: "sinhala/fetch.php", village: "sinhala/rpt_village_list.php", referrer: "village_list_sinhala" },
   ta: { fetch: "tamil/fetch.php", village: "tamil/rpt_village_list.php", referrer: "village_list_tamil" },
 } as const;
@@ -43,6 +48,32 @@ interface VillageRow {
   locationCode: string;
   oldGndNumber: string;
   villageName: string;
+}
+
+interface GnRow {
+  lifeCode: string;
+  gnCode: string;
+  nameSi: string;
+  nameTa: string;
+  nameEn: string;
+  mpaCode: string;
+  province: string;
+  district: string;
+  dsDivision: string;
+}
+
+interface GnTsvRow {
+  lifeCode: string;
+  gnCode: string;
+  nameEn: string;
+  nameSi: string;
+  nameTa: string;
+  mpaCode: string;
+  provinceId: string;
+  province: string;
+  districtId: string;
+  district: string;
+  dsDivision: string;
 }
 
 interface TsvRow {
@@ -117,6 +148,31 @@ function parseVillageTable(html: string): VillageRow[] {
   return rows;
 }
 
+function parseGnTable(html: string): GnRow[] {
+  const $ = cheerio.load(html);
+  const rows: GnRow[] = [];
+  $("table tbody tr").each((_, tr) => {
+    const cells = $(tr)
+      .find("td")
+      .map((_, td) => clean($(td).text()))
+      .get();
+    if (cells.length >= 9) {
+      rows.push({
+        lifeCode: cells[0],
+        gnCode: cells[1],
+        nameSi: cells[2],
+        nameTa: cells[3],
+        nameEn: cells[4],
+        mpaCode: cells[5],
+        province: cells[6],
+        district: cells[7],
+        dsDivision: cells[8],
+      });
+    }
+  });
+  return rows;
+}
+
 async function fetchOptions(action: string, queryId: string, lang: Lang): Promise<Option[]> {
   const config = LANG_CONFIG[lang];
   const raw = await post(config.fetch, `action=${action}&query=${queryId}`, lang);
@@ -134,8 +190,14 @@ async function fetchVillages(provinceId: string, districtId: string, dsId: strin
   return parseVillageTable(raw);
 }
 
+async function fetchGnData(provinceId: string, districtId: string): Promise<GnRow[]> {
+  const raw = await post(LANG_CONFIG.en.gn, `district=${districtId}&province=${provinceId}`, "en");
+  return parseGnTable(raw);
+}
+
 async function main() {
   const tsvRows: TsvRow[] = [];
+  const gnTsvRows: GnTsvRow[] = [];
   const langs: Lang[] = ["en", "si", "ta"];
 
   for (const province of PROVINCES) {
@@ -155,6 +217,26 @@ async function main() {
       const districtSi = districtsByLang.si[di]?.name ?? "";
       const districtTa = districtsByLang.ta[di]?.name ?? "";
       console.log(`  > ${district.name} [${district.id}]`);
+
+      const gnRows = await fetchGnData(province.id, district.id);
+      console.log(`    ${gnRows.length} GN divisions`);
+      await delay(100);
+
+      for (const gn of gnRows) {
+        gnTsvRows.push({
+          lifeCode: gn.lifeCode,
+          gnCode: gn.gnCode,
+          nameEn: gn.nameEn,
+          nameSi: gn.nameSi,
+          nameTa: gn.nameTa,
+          mpaCode: gn.mpaCode,
+          provinceId: province.id,
+          province: gn.province,
+          districtId: district.id,
+          district: gn.district,
+          dsDivision: gn.dsDivision,
+        });
+      }
 
       const dsByLang: Record<Lang, Option[]> = { en: [], si: [], ta: [] };
       for (const lang of langs) {
@@ -264,8 +346,43 @@ async function main() {
 
   const tsv = [header, ...lines].join("\n");
   writeFileSync("output/villages.tsv", tsv, "utf-8");
+  console.log(`\n${tsvRows.length} village rows written to output/villages.tsv`);
 
-  console.log(`\ndone — ${tsvRows.length} rows written to output/villages.tsv`);
+  const gnHeader = [
+    "life_code",
+    "gn_code",
+    "name_en",
+    "name_si",
+    "name_ta",
+    "mpa_code",
+    "province_id",
+    "province",
+    "district_id",
+    "district",
+    "ds_division",
+  ].join("\t");
+
+  const gnLines = gnTsvRows.map((r) =>
+    [
+      r.lifeCode,
+      r.gnCode,
+      r.nameEn,
+      r.nameSi,
+      r.nameTa,
+      r.mpaCode,
+      r.provinceId,
+      r.province,
+      r.districtId,
+      r.district,
+      r.dsDivision,
+    ].join("\t"),
+  );
+
+  const gnTsv = [gnHeader, ...gnLines].join("\n");
+  writeFileSync("output/gn.tsv", gnTsv, "utf-8");
+  console.log(`${gnTsvRows.length} GN rows written to output/gn.tsv`);
+
+  console.log("\ndone!");
 }
 
 const provinceNameCache: Record<string, Record<Lang, string>> = {};
